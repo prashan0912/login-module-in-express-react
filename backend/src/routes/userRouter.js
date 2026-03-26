@@ -7,7 +7,7 @@ import {
   // deleteUserController,
   // getUserByIdController,
   userProfileController,
-  // userLogoutController,
+  userLogoutController,
 } from "../controller/usersController/userController.js";
 
 import userLoginController from "../controller/usersController/userLoginController.js";
@@ -62,6 +62,6 @@ userRouter.post(
 
 userRouter.post("/profile", userProfileController);
 
-// userRouter.post("/logout", userLogoutController);
+userRouter.post("/logout", userLogoutController);
 
 export { userRouter };

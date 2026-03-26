@@ -1,6 +1,6 @@
 import createUserService from "../../service/service.js";
 import User from "../../model/userModel.js";
-import jwt from "jsonwebtoken"
+import jwt from "jsonwebtoken";
 import { serverConfig } from "../../config/serverConfig.js";
 
 const createUserController = async (req, res) => {
@@ -158,34 +158,36 @@ const createUserController = async (req, res) => {
 //   }
 // };
 
-// const userLogoutController = async (req, res) => {
-//   try {
-//     res.clearCookie("authToken", {
-//       httpOnly: true,
-//       sameSite: "lax",
-//       secure: false,
-//     });
+const userLogoutController = async (req, res) => {
+  try {
+    res.clearCookie("authToken", {
+      httpOnly: true,
+      sameSite: "lax",
+      secure: true,
+    });
 
-//     return res.status(200).json({
-//       success: true,
-//       message: "Logged out successfully",
-//     });
-//   } catch (error) {
-//     return res.status(500).json({
-//       success: false,
-//       message: "Logout failed",
-//       error,
-//     });
-//   }
-// };
+    res.clearCookie("authToken", { path: "/", httpOnly: true, secure: true });
+
+    return res.status(200).json({
+      success: true,
+      message: "Logged out successfully",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Logout failed",
+      error,
+    });
+  }
+};
 
 const userProfileController = async (req, res) => {
   try {
     // Get Authorization header
-    console.log(req.body)
+    console.log(req.body);
     console.log("userProfileController");
     // const authHeader = req.headers.authorization;
-    const authHeader = req.headers.authorization;;
+    const authHeader = req.headers.authorization;
 
     console.log("authHeader", authHeader);
 
@@ -203,11 +205,11 @@ const userProfileController = async (req, res) => {
     // Verify token
     const decoded = jwt.verify(token, serverConfig.JWT_SECRET);
 
-    console.log(decoded)
+    console.log(decoded);
     // Fetch user (exclude password)
     const user = await User.findById(decoded.id).select("password");
 
-    console.log("user",user)
+    console.log("user", user);
     if (!user) {
       return res.status(404).json({
         success: false,
@@ -219,7 +221,7 @@ const userProfileController = async (req, res) => {
     return res.status(200).json({
       success: true,
       message: "User profile fetched successfully",
-      data: user,
+      // data: user,
     });
   } catch (error) {
     console.log("Profile error:", error);
@@ -238,6 +240,6 @@ export {
   // getUserByIdController,
   // userLoginController,
   // updateUserController,
-  // userLogoutController,
+  userLogoutController,
   userProfileController,
 };
